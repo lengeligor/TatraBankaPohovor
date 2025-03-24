@@ -1,0 +1,2 @@
+INSERT INTO currency(id, krajina, kod, deviza_nakup, deviza_predaj, deviza_stred) VALUES (1,'Česká republika','CZK',255750,243200,249480);
+INSERT INTO currency(id, krajina, kod, deviza_nakup, deviza_predaj, deviza_stred) VALUES (2,'Dánsko','DKK',76461,72728,74595);
