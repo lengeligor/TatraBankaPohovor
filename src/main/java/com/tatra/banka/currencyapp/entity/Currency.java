@@ -1,9 +1,7 @@
 package com.tatra.banka.currencyapp.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
-@Data
 @Entity
 @Table(name = "currency")
 public class Currency {
@@ -16,7 +14,7 @@ public class Currency {
     @Column(name = "krajina", nullable = false)
     private String country;
 
-    @Column(name = "kod", nullable = false)
+    @Column(name = "kod", nullable = false, unique = true)
     private String code;
 
     @Column(name = "deviza_nakup", nullable = false)
@@ -37,4 +35,7 @@ public class Currency {
     @Column(name = "valuta_stred")
     private Double currencyCenter;
 
+    public Double getForeignExchangePurchase() {
+        return foreignExchangePurchase;
+    }
 }

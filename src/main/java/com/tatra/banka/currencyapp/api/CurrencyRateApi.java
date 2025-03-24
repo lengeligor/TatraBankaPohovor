@@ -8,4 +8,6 @@ import org.springframework.http.ResponseEntity;
 public interface CurrencyRateApi {
 
     ResponseEntity<Page<CurrencyDto>> getExchangeRateList(Pageable pageable);
+
+    ResponseEntity<Double> convert(String fromCurrencyCode, String toCurrencyCode, Double value);
 }

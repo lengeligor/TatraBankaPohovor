@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,5 +26,11 @@ public class CurrencyController implements CurrencyRateApi {
     @GetMapping("/list")
     public ResponseEntity<Page<CurrencyDto>> getExchangeRateList(Pageable pageable) {
         return ResponseEntity.ok(currencyService.getExchangeRateList(pageable));
+    }
+
+    @Override
+    @GetMapping("/convert")
+    public ResponseEntity<Double> convert(@RequestParam String fromCurrencyCode, @RequestParam String toCurrencyCode, @RequestParam Double value) {
+        return ResponseEntity.ok(currencyService.convert(fromCurrencyCode, toCurrencyCode, value));
     }
 }
