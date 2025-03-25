@@ -8,4 +8,6 @@ import org.mapstruct.Mapper;
 public interface CurrencyMapper {
 
     CurrencyDto toCurrencyDto(Currency currency);
+
+    Currency toCurrency(CurrencyDto currencyDto);
 }

@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-public class CurrencyServiceIT {
+class CurrencyServiceIT {
 
     private final CurrencyService service;
 

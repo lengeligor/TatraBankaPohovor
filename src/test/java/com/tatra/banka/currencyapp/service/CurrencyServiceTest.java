@@ -12,11 +12,10 @@ import org.mockito.Mockito;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class CurrencyServiceTest {
+class CurrencyServiceTest {
 
     private final CurrencyRepository repository = Mockito.mock(CurrencyRepository.class);
     private final CurrencyMapper mapper = Mockito.mock(CurrencyMapper.class);
@@ -24,6 +23,46 @@ public class CurrencyServiceTest {
 
     private final CurrencyService service = new CurrencyService(repository, mapper, exchangeRateService);
 
+    @Test
+    void createCurrency(){
+        CurrencyDto currencyDto = ObjectFactory.createCurrencyDto();
+        currencyDto.setId(1L);
+        Currency currency = ObjectFactory.createCurrency();
+        Currency savedCurrency = ObjectFactory.createCurrency();
+        savedCurrency.setId(1L);
+        when(mapper.toCurrency(currencyDto)).thenReturn(currency);
+        when(repository.save(currency)).thenReturn(savedCurrency);
+
+        Long currencyId;
+        try {
+            currencyId = service.createCurrency(currencyDto);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        assertEquals(1L, currencyId);
+        verify(mapper).toCurrency(currencyDto);
+        verify(repository).save(currency);
+    }
+
+    @Test
+    void getCurrency(){
+        Currency currency = ObjectFactory.createCurrency();
+        CurrencyDto currencyDto = ObjectFactory.createCurrencyDto();
+        when(repository.findById(1L)).thenReturn(Optional.of(currency));
+        when(mapper.toCurrencyDto(currency)).thenReturn(currencyDto);
+
+        CurrencyDto result = service.getCurrency(1L);
+        assertEquals(currencyDto.getCode(), result.getCode());
+        assertEquals(currencyDto.getCountry(), result.getCountry());
+    }
+
+    @Test
+    void deleteCurrency(){
+        doNothing().when(repository).deleteById(1L);
+        service.delete(1L);
+        verify(repository).deleteById(1L);
+    }
 
     @Test
     void getExchangeRateList(){

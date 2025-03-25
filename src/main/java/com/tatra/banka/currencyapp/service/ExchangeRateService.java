@@ -6,9 +6,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExchangeRateService {
 
-    public ExchangeRateService(){
-    }
-
     public double convert(Currency fromCurrency, Currency toCurrency, Double value) {
         double fromCurrencyRateToEUR = fromCurrency.getForeignExchangePurchase();
         double toCurrencyRateToEUR = toCurrency.getForeignExchangePurchase();

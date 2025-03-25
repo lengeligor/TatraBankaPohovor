@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Currency {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(unique = true)
     private Long id;
 

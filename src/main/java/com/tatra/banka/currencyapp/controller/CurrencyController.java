@@ -2,13 +2,12 @@ package com.tatra.banka.currencyapp.controller;
 
 import com.tatra.banka.currencyapp.api.CurrencyRateApi;
 import com.tatra.banka.currencyapp.dto.CurrencyDto;
+import com.tatra.banka.currencyapp.exceptions.BusinessException;
 import com.tatra.banka.currencyapp.service.CurrencyService;
 import lombok.NonNull;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,6 +19,25 @@ public class CurrencyController implements CurrencyRateApi {
 
     public CurrencyController(@NonNull CurrencyService currencyService) {
         this.currencyService = currencyService;
+    }
+
+    @Override
+    @PostMapping
+    public ResponseEntity<Long> createCurrency(@RequestBody CurrencyDto currencyDto) throws BusinessException {
+        return ResponseEntity.ok(currencyService.createCurrency(currencyDto));
+    }
+
+    @Override
+    @GetMapping("/{id}")
+    public ResponseEntity<CurrencyDto> getCurrency(@PathVariable Long id) {
+        return ResponseEntity.ok(currencyService.getCurrency(id));
+    }
+
+    @Override
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCurrency(@PathVariable Long id) {
+        currencyService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CurrencyMapperTest {
+class CurrencyMapperTest {
 
     private final CurrencyMapper mapper = new CurrencyMapperImpl();
 
@@ -26,5 +26,22 @@ public class CurrencyMapperTest {
         assertEquals(currencyDto.getCurrencyPurchase(), result.getCurrencyPurchase());
         assertEquals(currencyDto.getCurrencySales(), result.getCurrencySales());
         assertEquals(currencyDto.getCurrencyCenter(), result.getCurrencyCenter());
+    }
+
+    @Test
+    void toCurrency(){
+        Currency currency = ObjectFactory.createCurrency();
+        CurrencyDto currencyDto = ObjectFactory.createCurrencyDto();
+
+        Currency result = mapper.toCurrency(currencyDto);
+
+        assertEquals(currency.getCountry(), result.getCountry());
+        assertEquals(currency.getCode(), result.getCode());
+        assertEquals(currency.getForeignExchangePurchase(), result.getForeignExchangePurchase());
+        assertEquals(currency.getForeignExchangeSales(), result.getForeignExchangeSales());
+        assertEquals(currency.getForeignExchangeCenter(), result.getForeignExchangeCenter());
+        assertEquals(currency.getCurrencyPurchase(), result.getCurrencyPurchase());
+        assertEquals(currency.getCurrencySales(), result.getCurrencySales());
+        assertEquals(currency.getCurrencyCenter(), result.getCurrencyCenter());
     }
 }

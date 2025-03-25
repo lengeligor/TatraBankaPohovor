@@ -1,6 +1,7 @@
 package com.tatra.banka.currencyapp.service;
 
 import com.tatra.banka.currencyapp.entity.Currency;
+import com.tatra.banka.currencyapp.exceptions.BusinessException;
 import com.tatra.banka.currencyapp.mapper.CurrencyMapper;
 import com.tatra.banka.currencyapp.dto.CurrencyDto;
 import com.tatra.banka.currencyapp.repository.CurrencyRepository;
@@ -24,6 +25,24 @@ public class CurrencyService {
         this.currencyRepository = currencyRepository;
         this.currencyMapper = currencyMapper;
         this.exchangeRateService = exchangeRateService;
+    }
+
+    public Long createCurrency(CurrencyDto currencyDto) throws BusinessException {
+        if (currencyDto == null || currencyDto.getCode() == null){
+            throw new BusinessException("Code is required!");
+        }
+        Currency currency = currencyMapper.toCurrency(currencyDto);
+        return currencyRepository.save(currency).getId();
+    }
+
+    public void delete(Long id) {
+        currencyRepository.deleteById(id);
+    }
+
+    public CurrencyDto getCurrency(Long id) {
+        Currency currency = currencyRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Currency with id %d is not recognized!", id)));
+        return currencyMapper.toCurrencyDto(currency);
     }
 
     public List<CurrencyDto> getExchangeRateList() {
