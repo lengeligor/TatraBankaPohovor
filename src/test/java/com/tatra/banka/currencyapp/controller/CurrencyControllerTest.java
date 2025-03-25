@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.data.domain.*;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -25,26 +26,24 @@ public class CurrencyControllerTest {
     protected MockMvc mvc;
     private final CurrencyService service = Mockito.mock(CurrencyService.class);
     private final CurrencyController controller = new CurrencyController(service);
-    private Pageable pageable;
 
     @BeforeEach
     void setUp() {
-        mvc = MockMvcBuilders.standaloneSetup(controller).build();
-        pageable = PageRequest.of(0, 10);
+        mvc = MockMvcBuilders.standaloneSetup(controller)
+                .build();
     }
 
     @Test
     public void testGetExchangeRateList() throws Exception {
-        //TODO
-//        Page<CurrencyDto> mockPage = new PageImpl<>(List.of(ObjectFactory.createCurrencyDto()));
-//
-//        when(service.getExchangeRateList(pageable)).thenReturn(mockPage);
-//
-//        mvc.perform(MockMvcRequestBuilders.get("/currency/list?page=0&size=10")
-//                        .accept(MediaType.APPLICATION_JSON_VALUE))
-//                .andExpect(status().isOk());
-//
-//        verify(service).getExchangeRateList(pageable);
+        List<CurrencyDto> mockPage = List.of(ObjectFactory.createCurrencyDto());
+
+        when(service.getExchangeRateList()).thenReturn(mockPage);
+
+        mvc.perform(MockMvcRequestBuilders.get("/currency/list")
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk());
+
+        verify(service).getExchangeRateList();
     }
 
     @Test

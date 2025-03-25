@@ -8,9 +8,6 @@ import com.tatra.banka.currencyapp.repository.CurrencyRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,15 +29,15 @@ public class CurrencyServiceTest {
     void getExchangeRateList(){
         Currency currency = ObjectFactory.createCurrency();
         CurrencyDto currencyDto = ObjectFactory.createCurrencyDto();
-        Page<Currency> mockList = new PageImpl<>(List.of(currency));
+        List<Currency> mockList = List.of(currency);
 
-        when(repository.findAll(PageRequest.of(0, 10))).thenReturn(mockList);
+        when(repository.findAll()).thenReturn(mockList);
         when(mapper.toCurrencyDto(currency)).thenReturn(currencyDto);
 
-        Page<CurrencyDto> result = service.getExchangeRateList(PageRequest.of(0, 10));
+        List<CurrencyDto> result = service.getExchangeRateList();
 
-        assertEquals(1, result.getTotalElements());
-        assertEquals(currencyDto.getCountry(), result.getContent().get(0).getCountry());
+        assertEquals(1, result.size());
+        assertEquals(currencyDto.getCountry(), result.get(0).getCountry());
     }
 
     @Test
@@ -73,8 +70,17 @@ public class CurrencyServiceTest {
 
     @Test
     void convertSuccess(){
-        Currency currencyFrom = ObjectFactory.createCurrency();
-        Currency currencyTo = ObjectFactory.createCurrency();
-        //TODO
+        Currency currencyFrom = ObjectFactory.createCurrency("Česká republika", "CZK", 25.5750);
+        Currency currencyTo = ObjectFactory.createCurrency("Dánsko","DKK",7.6461);
+
+        when(repository.findByCode("CZK")).thenReturn(Optional.of(currencyFrom));
+        when(repository.findByCode("DKK")).thenReturn(Optional.of(currencyTo));
+        when(exchangeRateService.convert(currencyFrom,currencyTo,1.0)).thenReturn(0.2989);
+
+        assertEquals(0.2989, service.convert("CZK", "DKK", 1.0));
+
+        verify(repository).findByCode("DKK");
+        verify(repository).findByCode("CZK");
+        verify(exchangeRateService).convert(currencyFrom,currencyTo,1.0);
     }
 }

@@ -6,10 +6,10 @@ import com.tatra.banka.currencyapp.dto.CurrencyDto;
 import com.tatra.banka.currencyapp.repository.CurrencyRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.NonNull;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -26,8 +26,8 @@ public class CurrencyService {
         this.exchangeRateService = exchangeRateService;
     }
 
-    public Page<CurrencyDto> getExchangeRateList(Pageable pageable) {
-        return currencyRepository.findAll(pageable).map(currencyMapper::toCurrencyDto);
+    public List<CurrencyDto> getExchangeRateList() {
+        return currencyRepository.findAll().stream().map(currencyMapper::toCurrencyDto).toList();
     }
 
     public Double convert(String fromCurrencyCode, String toCurrencyCode, Double value) {

@@ -3,6 +3,10 @@ package com.tatra.banka.currencyapp;
 import com.tatra.banka.currencyapp.dto.CurrencyDto;
 import com.tatra.banka.currencyapp.entity.Currency;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class ObjectFactory {
 
     public static CurrencyDto createCurrencyDto(){
@@ -29,5 +33,27 @@ public class ObjectFactory {
         currency.setCurrencySales(24.0710);
         currency.setCurrencyCenter(24.9480);
         return currency;
+    }
+
+    public static Currency createCurrency(String country, String code, double foreignExchangePurchase){
+        Currency currency =  new Currency();
+        currency.setCountry(country);
+        currency.setCode(code);
+        currency.setForeignExchangePurchase(foreignExchangePurchase);
+        return currency;
+    }
+
+    public static Map<Double, List<Currency>> createExpectedResults() {
+        Map<Double, List<Currency>> expectedResults = new HashMap<>();
+        Currency czk = createCurrency("Česká republika", "CZK", 25.5750);
+        Currency dkk = createCurrency("Dánsko","DKK",7.6461);
+        Currency chf = createCurrency("Švajčiarsko","CHF",0.9782);
+        expectedResults.put(0.2989, List.of(czk,dkk));
+        expectedResults.put(0.0382, List.of(czk,chf));
+        expectedResults.put(3.3448, List.of(dkk,czk));
+        expectedResults.put(0.1279, List.of(dkk,chf));
+        expectedResults.put(26.1449, List.of(chf,czk));
+        expectedResults.put(7.8164, List.of(chf,dkk));
+        return expectedResults;
     }
 }
